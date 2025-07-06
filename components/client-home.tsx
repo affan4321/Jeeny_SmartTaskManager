@@ -22,7 +22,7 @@ export const ClientHome = memo(function ClientHome({ hasEnvVars }: ClientHomePro
     // <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-pink-900">
     <div className="min-h-screen bg-transparent">
       {/* Background Canvas */}
-      <BackgroundCanvas />
+      {/* <BackgroundCanvas /> */}
       
       {/* Hero Section */}
       <div className="relative overflow-hidden">

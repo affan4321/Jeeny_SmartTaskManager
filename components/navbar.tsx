@@ -11,8 +11,7 @@ export default function Navbar({ hasEnvVars }: { hasEnvVars: string | undefined 
         <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm gap-2">
             <div className="">
                 <Link 
-                href={"https://www.jeeny.me/"} 
-                target="_blank"
+                href={"/"} 
                 className="flex flex-col md:flex-row gap-1 items-center font-semibold justify-center"
                 >
                     <Image src={Jeeny} alt="Logo" className="mx-auto md:w-20 w-32" />

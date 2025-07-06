@@ -285,7 +285,7 @@ export function ReminderBell({ tasks }: ReminderBellProps) {
             className="fixed inset-0 z-10" 
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-20 max-h-96 overflow-hidden">
+          <div className="absolute right-0 mt-2 w-60 sm:w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-20 max-h-[80vh] sm:max-h-96 overflow-hidden">
             <div className="p-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between">
                 <div>
@@ -307,7 +307,7 @@ export function ReminderBell({ tasks }: ReminderBellProps) {
               </div>
             </div>
             
-            <div className="max-h-64 overflow-y-auto">
+            <div className="max-h-[60vh] sm:max-h-64 overflow-y-auto">
               {notifications.length === 0 ? (
                 <div className="p-4 text-center text-gray-500 dark:text-gray-400">
                   <p>No reminders at the moment</p>
