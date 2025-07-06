@@ -231,7 +231,6 @@ export function ReminderBell({ tasks }: ReminderBellProps) {
 
   // Clear specific notification
   const clearNotification = (id: string) => {
-    const notification = notifications.find(n => n.id === id);
     setNotifications(prev => prev.filter(n => n.id !== id));
     
     // If this was the last notification, hide the badge
