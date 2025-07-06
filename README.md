@@ -73,6 +73,11 @@
 
 ## 🚀 Getting Started
 
+### Check the deployed Site
+- https://jeeny-smart-task-manager.vercel.app/
+
+<h2>OR build on your system</h2>
+
 ### Prerequisites
 - Node.js (v18 or higher)
 - npm, yarn, or pnpm
