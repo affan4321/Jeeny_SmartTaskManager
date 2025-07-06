@@ -4,7 +4,6 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import BackgroundCanvas from '@/components/BackgroundCanvas'
 import { hasEnvVars } from "@/lib/utils";
-import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 
 const defaultUrl = process.env.VERCEL_URL
