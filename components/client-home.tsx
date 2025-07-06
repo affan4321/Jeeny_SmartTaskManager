@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useCallback, memo } from "react";
 import { ChevronRight, CheckCircle, Clock, Bell } from "lucide-react";
-import BackgroundCanvas from "./BackgroundCanvas";
 
 interface ClientHomeProps {
   hasEnvVars: boolean;
