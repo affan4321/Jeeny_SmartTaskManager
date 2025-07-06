@@ -10,6 +10,8 @@ interface ClientHomeProps {
 }
 
 export const ClientHome = memo(function ClientHome({ hasEnvVars }: ClientHomeProps) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _ = hasEnvVars; // Keep parameter for future use
   const router = useRouter();
   
   const handleGetStarted = useCallback(() => {

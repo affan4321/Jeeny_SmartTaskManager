@@ -5,9 +5,9 @@ import AddTask from "@/app/add-task.png";
 import RemoveTask from "@/app/remove-task.svg";
 import EditTask from "@/app/edit-task.png";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { AddTaskForm } from "./add-task-form";
-import { EditTaskForm } from "./edit-task-form";
+// import { useRouter } from "next/navigation"; // Commented out as not currently used
+// import { AddTaskForm } from "./add-task-form"; // Commented out as not currently used
+// import { EditTaskForm } from "./edit-task-form"; // Commented out as not currently used
 
 interface Task {
   id: string;

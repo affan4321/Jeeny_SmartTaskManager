@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation"; // Commented out as not currently used
 import { createClient } from "@/lib/supabase/client";
 
 interface Task {
@@ -64,7 +64,7 @@ export function EditTaskForm({ task, onClose }: EditTaskFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [existingCategories, setExistingCategories] = useState<Category[]>([]);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
-  const router = useRouter();
+  // const router = useRouter(); // Commented out as not currently used
 
   // Fetch existing categories when component mounts
   useEffect(() => {

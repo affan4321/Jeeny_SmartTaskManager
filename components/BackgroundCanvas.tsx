@@ -20,16 +20,16 @@ export default function BackgroundCanvas() {
     console.log('BackgroundCanvas: Canvas dimensions:', width, 'x', height)
 
     // Create 4 snake-like paths that enter from outside the canvas
-    const snakes = Array.from({ length: 4 }).map((_, index) => ({
+    const snakes = Array.from({ length: 4 }).map((_, snakeIndex) => ({
       points: [] as Array<{x: number, y: number}>,
       speed: 0.8 + Math.random() * 3, // Faster movement for longer paths
       amplitude: 40 + Math.random() * 10, // Larger amplitude for more dramatic curves
       frequency: 0.003 + Math.random() * 0.005, // Slower frequency for smoother curves
-      phase: index * Math.PI * 2 / 4,
+      phase: snakeIndex * Math.PI * 2 / 4,
       // Start from outside the canvas
-      x: index % 2 === 0 ? -100 : width + 100, // Left or right side entry
+      x: snakeIndex % 2 === 0 ? -100 : width + 100, // Left or right side entry
       y: Math.random() * height, // Random vertical position
-      direction: index % 2 === 0 ? 0 : Math.PI, // Move right or left initially
+      direction: snakeIndex % 2 === 0 ? 0 : Math.PI, // Move right or left initially
       maxPoints: 200, // Much longer trails
       lifespan: 0, // Track how long the snake has been alive
       maxLifespan: 1000 + Math.random() * 500, // Live longer for screen-crossing paths
@@ -42,7 +42,7 @@ export default function BackgroundCanvas() {
       ctx.clearRect(0, 0, width, height)
       time += 0.01
 
-      snakes.forEach((snake, index) => {
+      snakes.forEach((snake) => {
         // Increment lifespan
         snake.lifespan++
 

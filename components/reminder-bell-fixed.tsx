@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { createClient } from "@/lib/supabase/client";
+// import { createClient } from "@/lib/supabase/client"; // Commented out as not currently used
 
 interface Task {
   id: string;
@@ -173,7 +173,7 @@ export function ReminderBell({ tasks }: ReminderBellProps) {
 
   // Clean up reminded tasks when tasks are completed, deleted, or deadlines pass
   useEffect(() => {
-    const currentTaskIds = new Set(tasks.map(t => t.id));
+    // const currentTaskIds = new Set(tasks.map(t => t.id)); // Not used, commented out
     const now = new Date();
     
     setRemindedTasks(prev => {

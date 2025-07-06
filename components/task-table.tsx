@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useRef } from "react";
-import { ChevronDown, ChevronUp, Filter, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Filter } from "lucide-react";
 
 interface Task {
   id: string;
@@ -83,7 +83,7 @@ export function TaskTable({ tasks, onTaskUpdate, onTaskEdit, onTaskDelete, onAdd
   
   // Apply filters and sorting
   const filteredAndSortedTasks = useMemo(() => {
-    let filtered = tasks.filter(task => {
+    const filtered = tasks.filter(task => {
       // Category filter
       if (filters.category.length > 0) {
         const taskCategory = task.categories?.name || 'Uncategorized';
@@ -125,8 +125,8 @@ export function TaskTable({ tasks, onTaskUpdate, onTaskEdit, onTaskDelete, onAdd
     
     // Apply sorting
     filtered.sort((a, b) => {
-      let aValue: any = a[sortState.column as keyof Task];
-      let bValue: any = b[sortState.column as keyof Task];
+      let aValue: unknown = a[sortState.column as keyof Task];
+      let bValue: unknown = b[sortState.column as keyof Task];
       
       // Handle special cases
       if (sortState.column === 'category') {
@@ -140,11 +140,11 @@ export function TaskTable({ tasks, onTaskUpdate, onTaskEdit, onTaskDelete, onAdd
       if (bValue === null) return -1;
       
       // Convert to string for comparison
-      aValue = String(aValue).toLowerCase();
-      bValue = String(bValue).toLowerCase();
+      const aStr = String(aValue).toLowerCase();
+      const bStr = String(bValue).toLowerCase();
       
-      if (aValue < bValue) return sortState.direction === 'asc' ? -1 : 1;
-      if (aValue > bValue) return sortState.direction === 'asc' ? 1 : -1;
+      if (aStr < bStr) return sortState.direction === 'asc' ? -1 : 1;
+      if (aStr > bStr) return sortState.direction === 'asc' ? 1 : -1;
       return 0;
     });
     
@@ -194,23 +194,23 @@ export function TaskTable({ tasks, onTaskUpdate, onTaskEdit, onTaskDelete, onAdd
     setStartWidth(columnWidths[column]);
   };
   
-  const handleMouseMove = (e: MouseEvent) => {
-    if (isResizing) {
-      const diff = e.clientX - startX;
-      const newWidth = Math.max(50, startWidth + diff);
-      setColumnWidths(prev => ({
-        ...prev,
-        [isResizing]: newWidth
-      }));
-    }
-  };
-  
   const handleMouseUp = () => {
     setIsResizing(null);
   };
   
   // Add event listeners for column resizing
   useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isResizing) {
+        const diff = e.clientX - startX;
+        const newWidth = Math.max(50, startWidth + diff);
+        setColumnWidths(prev => ({
+          ...prev,
+          [isResizing]: newWidth
+        }));
+      }
+    };
+
     if (isResizing) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
@@ -573,7 +573,7 @@ export function TaskTable({ tasks, onTaskUpdate, onTaskEdit, onTaskDelete, onAdd
           
           <tbody>
             {filteredAndSortedTasks.length > 0 ? (
-              filteredAndSortedTasks.map((task, index) => {
+              filteredAndSortedTasks.map((task) => {
                 const deadlineStatus = getDeadlineStatus(task.deadline);
                 return (
                   <tr

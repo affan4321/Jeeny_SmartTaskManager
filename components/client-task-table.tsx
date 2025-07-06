@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation"; // Commented out as not currently used
 import { createClient } from "@/lib/supabase/client";
 import { TaskTable } from "./task-table";
 import { EditTaskForm } from "./edit-task-form";
@@ -34,7 +34,7 @@ export function ClientTaskTable({ initialTasks, showReminderBell = false }: Clie
   const [isUpdating, setIsUpdating] = useState<string | null>(null);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
-  const router = useRouter();
+  // const router = useRouter(); // Commented out as not currently used
 
   // Set up realtime subscription for tasks
   useEffect(() => {
@@ -136,7 +136,7 @@ export function ClientTaskTable({ initialTasks, showReminderBell = false }: Clie
     } finally {
       setIsUpdating(null);
     }
-  }, [router]);
+  }, []); // Removed router dependency as it's not used in the function
 
   const handleAddTask = useCallback(() => {
     setShowAddForm(true);
@@ -171,7 +171,7 @@ export function ClientTaskTable({ initialTasks, showReminderBell = false }: Clie
       console.error("Error deleting task:", error);
       alert(error instanceof Error ? error.message : "Failed to delete task");
     }
-  }, [router]);
+  }, []); // Removed router dependency as it's not used in the function
 
   const handleTaskEdit = useCallback((task: Task) => {
     setEditingTask(task);
@@ -206,7 +206,7 @@ export function ClientTaskTable({ initialTasks, showReminderBell = false }: Clie
       {editingTask && (
         <div className="mb-6">
           <EditTaskForm 
-            task={editingTask as any} 
+            task={editingTask as Parameters<typeof EditTaskForm>[0]['task']} 
             onClose={handleEditClose}
           />
         </div>
