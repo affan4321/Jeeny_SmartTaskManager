@@ -7,6 +7,7 @@ import { TaskTable } from "./task-table";
 import { EditTaskForm } from "./edit-task-form";
 import { AddTaskForm } from "./add-task-form";
 import { ReminderBell } from "./reminder-bell";
+import { ErrorBoundary } from "./error-boundary";
 
 interface Task {
   id: string;
@@ -36,9 +37,17 @@ export function ClientTaskTable({ initialTasks, showReminderBell = true }: Clien
   const [showAddForm, setShowAddForm] = useState(false);
   // const router = useRouter(); // Commented out as not currently used
 
+  // Debug logging for mobile issues
+  useEffect(() => {
+    console.log('ClientTaskTable mounted with tasks:', initialTasks.length);
+    console.log('User agent:', typeof window !== 'undefined' ? window.navigator.userAgent : 'Unknown');
+    console.log('Screen dimensions:', typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight}` : 'Unknown');
+  }, [initialTasks.length]);
+
   // Set up realtime subscription for tasks
   useEffect(() => {
     try {
+      console.log('Setting up realtime subscription...');
       const supabase = createClient();
       
       const channel = supabase
@@ -196,7 +205,15 @@ export function ClientTaskTable({ initialTasks, showReminderBell = true }: Clien
       {/* Reminder Bell - only show if requested */}
       {showReminderBell && (
         <div className="mb-4 flex justify-end pr-2 pt-2 relative z-[80]">
-          <ReminderBell tasks={tasks} />
+          <ErrorBoundary fallback={
+            <div className="p-2 rounded-full bg-gray-100 dark:bg-gray-800">
+              <svg className="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+            </div>
+          }>
+            <ReminderBell tasks={tasks} />
+          </ErrorBoundary>
         </div>
       )}
       

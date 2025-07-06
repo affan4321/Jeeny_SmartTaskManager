@@ -42,6 +42,17 @@ export function ReminderBell({ tasks }: ReminderBellProps) {
   // Use refs to avoid stale closures
   const notificationsRef = useRef<ReminderNotification[]>([]);
   const remindedTasksRef = useRef<Set<string>>(new Set());
+
+  // Debug logging for mobile issues
+  useEffect(() => {
+    try {
+      console.log('ReminderBell mounted with tasks:', tasks.length);
+      console.log('User agent:', typeof window !== 'undefined' ? window.navigator.userAgent : 'Unknown');
+      console.log('Notification permission:', typeof window !== 'undefined' && 'Notification' in window ? Notification.permission : 'Not supported');
+    } catch (error) {
+      console.error('Error in ReminderBell debug logging:', error);
+    }
+  }, [tasks.length]);
   
   // Update refs when state changes
   useEffect(() => {
@@ -118,12 +129,16 @@ export function ReminderBell({ tasks }: ReminderBellProps) {
       });
       
       // Show browser notification if permission is granted
-      if (Notification.permission === 'granted') {
+      if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
         newNotifications.forEach(notification => {
-          new Notification(`Task Reminder: ${notification.title}`, {
-            body: notification.message,
-            icon: '/favicon.ico'
-          });
+          try {
+            new Notification(`Task Reminder: ${notification.title}`, {
+              body: notification.message,
+              icon: '/favicon.ico'
+            });
+          } catch (error) {
+            console.warn('Failed to create browser notification:', error);
+          }
         });
       }
     }
@@ -186,8 +201,18 @@ export function ReminderBell({ tasks }: ReminderBellProps) {
 
   // Request notification permission on mount
   useEffect(() => {
-    if (Notification.permission === 'default') {
-      Notification.requestPermission();
+    try {
+      if (typeof window !== 'undefined' && 'Notification' in window) {
+        if (Notification.permission === 'default') {
+          Notification.requestPermission().catch(error => {
+            console.warn('Notification permission request failed:', error);
+          });
+        }
+      } else {
+        console.log('Notifications not supported on this device');
+      }
+    } catch (error) {
+      console.error('Error requesting notification permission:', error);
     }
   }, []);
 
