@@ -4,18 +4,18 @@ import { useRef, useEffect, useState } from 'react'
 export default function BackgroundCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [isClient, setIsClient] = useState(false)
-  const [isIOS, setIsIOS] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     setIsClient(true)
-    // Detect iOS
-    const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-    setIsIOS(iOS)
+    // Detect mobile devices for performance optimization
+    const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+    setIsMobile(mobile)
   }, [])
 
   useEffect(() => {
-    if (!isClient || isIOS) return // Skip canvas initialization on iOS
+    if (!isClient) return // Only skip if not on client side
     
     try {
       const canvas = canvasRef.current
@@ -24,14 +24,14 @@ export default function BackgroundCanvas() {
       const ctx = canvas.getContext('2d')
       if (!ctx) return
 
-      console.log('BackgroundCanvas: Initializing snake-like canvas animation')
+      console.log('BackgroundCanvas: Initializing snake-like canvas animation', isMobile ? '(Mobile optimized)' : '')
 
-      // Safe window access for iOS
+      // Safe window access
       let width = typeof window !== 'undefined' ? window.innerWidth : 1920
       let height = typeof window !== 'undefined' ? window.innerHeight : 1080
       
-      // iOS Safari can have issues with very large canvas dimensions
-      const maxDimension = 2048 // Reduced from 4096 for better iOS compatibility
+      // Mobile optimization: reduce canvas size for performance
+      const maxDimension = isMobile ? 1536 : 2048
       width = Math.min(width, maxDimension)
       height = Math.min(height, maxDimension)
       
@@ -45,8 +45,9 @@ export default function BackgroundCanvas() {
 
       console.log('BackgroundCanvas: Canvas dimensions:', width, 'x', height)
 
-    // Create 4 snake-like paths that enter from outside the canvas
-    const snakes = Array.from({ length: 4 }).map((_, index) => ({
+    // Create snake-like paths (fewer on mobile for performance)
+    const snakeCount = isMobile ? 2 : 4
+    const snakes = Array.from({ length: snakeCount }).map((_, index) => ({
       points: [] as Array<{x: number, y: number}>,
       speed: 0.8 + Math.random() * 3, // Faster movement for longer paths
       amplitude: 40 + Math.random() * 10, // Larger amplitude for more dramatic curves
@@ -63,8 +64,19 @@ export default function BackgroundCanvas() {
     }))
 
     let time = 0
+    
+    // Mobile optimization: reduce frame rate
+    let lastFrameTime = 0
+    const targetFrameRate = isMobile ? 30 : 60 // 30fps on mobile, 60fps on desktop
+    const frameInterval = 1000 / targetFrameRate
 
-    const animate = () => {
+    const animate = (currentTime: number = 0) => {
+      if (currentTime - lastFrameTime < frameInterval) {
+        requestAnimationFrame(animate)
+        return
+      }
+      lastFrameTime = currentTime
+
       ctx.clearRect(0, 0, width, height)
       time += 0.01
 
@@ -263,15 +275,16 @@ export default function BackgroundCanvas() {
 
     animate()
 
-    // iOS-friendly resize listener with throttling
+    // Mobile-friendly resize listener with throttling
     let resizeTimeout: NodeJS.Timeout
     const handleResize = () => {
       clearTimeout(resizeTimeout)
       resizeTimeout = setTimeout(() => {
         try {
           if (typeof window !== 'undefined') {
-            width = Math.min(window.innerWidth, 4096)
-            height = Math.min(window.innerHeight, 4096)
+            const maxDimension = isMobile ? 1536 : 2048
+            width = Math.min(window.innerWidth, maxDimension)
+            height = Math.min(window.innerHeight, maxDimension)
             canvas.width = width
             canvas.height = height
           }
@@ -295,9 +308,9 @@ export default function BackgroundCanvas() {
       console.error('BackgroundCanvas: Failed to initialize canvas:', error)
       // Fail silently to prevent app crash
     }
-  }, [isClient, isIOS])
+  }, [isClient, isMobile])
 
-  if (!isClient || isIOS) {
+  if (!isClient) {
     return null
   }
 

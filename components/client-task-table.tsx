@@ -37,17 +37,9 @@ export function ClientTaskTable({ initialTasks, showReminderBell = true }: Clien
   const [showAddForm, setShowAddForm] = useState(false);
   // const router = useRouter(); // Commented out as not currently used
 
-  // Debug logging for mobile issues
-  useEffect(() => {
-    console.log('ClientTaskTable mounted with tasks:', initialTasks.length);
-    console.log('User agent:', typeof window !== 'undefined' ? window.navigator.userAgent : 'Unknown');
-    console.log('Screen dimensions:', typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight}` : 'Unknown');
-  }, [initialTasks.length]);
-
   // Set up realtime subscription for tasks
   useEffect(() => {
     try {
-      console.log('Setting up realtime subscription...');
       const supabase = createClient();
       
       const channel = supabase
