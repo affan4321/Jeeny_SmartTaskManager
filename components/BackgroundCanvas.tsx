@@ -14,13 +14,8 @@ export default function BackgroundCanvas() {
     setIsIOS(iOS)
   }, [])
 
-  // Temporarily disable canvas on iOS to prevent crashes
-  if (isIOS) {
-    return null
-  }
-
   useEffect(() => {
-    if (!isClient) return
+    if (!isClient || isIOS) return // Skip canvas initialization on iOS
     
     try {
       const canvas = canvasRef.current
@@ -300,9 +295,9 @@ export default function BackgroundCanvas() {
       console.error('BackgroundCanvas: Failed to initialize canvas:', error)
       // Fail silently to prevent app crash
     }
-  }, [isClient])
+  }, [isClient, isIOS])
 
-  if (!isClient) {
+  if (!isClient || isIOS) {
     return null
   }
 

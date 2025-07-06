@@ -38,10 +38,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* Temporarily disable BackgroundCanvas for iOS debugging */}
-          {/* <ErrorBoundary fallback={<div />}>
+          <ErrorBoundary fallback={<div />}>
             <BackgroundCanvas />
-          </ErrorBoundary> */}
+          </ErrorBoundary>
           <div className="min-h-screen flex flex-col relative">
 
             <main className="flex-1 flex flex-col items-center overflow-auto relative z-10">
