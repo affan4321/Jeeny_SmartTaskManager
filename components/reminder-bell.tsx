@@ -71,17 +71,24 @@ export function ReminderBell({ tasks }: ReminderBellProps) {
         
         // Check if the current time has passed the reminder time
         if (currentTime >= reminderTime) {
-          // Check if we already have a notification for this task OR if we've already reminded about it
-          const existingNotification = notificationsRef.current.find(n => n.taskId === task.id);
-          const alreadyReminded = remindedTasksRef.current.has(task.id);
+          // Create a unique key combining task ID and reminder time
+          const reminderKey = `${task.id}-${task.reminder}`;
           
-          if (!existingNotification && !alreadyReminded) {
+          // Check if we've already reminded about this specific reminder (task ID + reminder time)
+          const alreadyReminded = remindedTasksRef.current.has(reminderKey);
+          
+          // Also check if there's already a notification for this specific reminder
+          const existingNotification = notificationsRef.current.find(n => 
+            n.taskId === task.id && n.id.includes(task.reminder!.replace(/[:.]/g, ''))
+          );
+          
+          if (!alreadyReminded && !existingNotification) {
             const message = task.deadline 
               ? `Reminder: "${task.title}" - scheduled for ${new Date(task.deadline).toLocaleString()}`
               : `Reminder: "${task.title}"`;
             
             newNotifications.push({
-              id: `${task.id}-${Date.now()}`,
+              id: `${task.id}-${task.reminder!.replace(/[:.]/g, '')}-${Date.now()}`, // Include reminder time in ID
               taskId: task.id,
               title: task.title,
               message,
@@ -97,11 +104,15 @@ export function ReminderBell({ tasks }: ReminderBellProps) {
       // Update notifications
       setNotifications(prev => [...prev, ...newNotifications]);
       
-      // Update reminded tasks
+      // Update reminded tasks with reminder keys
       setRemindedTasks(prev => {
         const newSet = new Set(prev);
         newNotifications.forEach(notification => {
-          newSet.add(notification.taskId);
+          const task = tasks.find(t => t.id === notification.taskId);
+          if (task && task.reminder) {
+            const reminderKey = `${task.id}-${task.reminder}`;
+            newSet.add(reminderKey);
+          }
         });
         return newSet;
       });
@@ -123,20 +134,24 @@ export function ReminderBell({ tasks }: ReminderBellProps) {
     setRemindedTasks(prev => {
       const newSet = new Set<string>();
       
-      prev.forEach(taskId => {
+      prev.forEach(reminderKey => {
+        // Extract task ID from reminder key (format: "taskId-reminderTime")
+        const taskId = reminderKey.split('-')[0];
+        const reminderTime = reminderKey.substring(taskId.length + 1); // Get everything after "taskId-"
+        
         const task = tasks.find(t => t.id === taskId);
-        // Keep the task ID in reminded set if:
+        // Keep the reminder key in reminded set if:
         // 1. Task still exists
         // 2. Task is not completed  
-        // 3. Task still has a reminder set
+        // 3. Task still has the same reminder time
         // 4. The reminder time hasn't passed by more than 1 hour (to prevent re-notifications)
-        if (task && !task.completed && task.reminder) {
-          const reminderTime = new Date(task.reminder);
-          const hoursSinceReminder = (currentTime.getTime() - reminderTime.getTime()) / (1000 * 60 * 60);
+        if (task && !task.completed && task.reminder === reminderTime) {
+          const reminderTimeDate = new Date(reminderTime);
+          const hoursSinceReminder = (currentTime.getTime() - reminderTimeDate.getTime()) / (1000 * 60 * 60);
           
           // Keep in reminded set if reminder was within the last hour
           if (hoursSinceReminder <= 1) {
-            newSet.add(taskId);
+            newSet.add(reminderKey);
           }
         }
       });
@@ -144,6 +159,30 @@ export function ReminderBell({ tasks }: ReminderBellProps) {
       return newSet;
     });
   }, [tasks, currentTime]); // Add currentTime to dependencies
+
+  // Clean up stale notifications when reminder times change
+  useEffect(() => {
+    setNotifications(prev => {
+      return prev.filter(notification => {
+        const task = tasks.find(t => t.id === notification.taskId);
+        
+        // Keep notification if:
+        // 1. Task still exists and is not completed
+        // 2. Task still has a reminder set
+        // 3. The notification ID contains the current reminder time (for new format)
+        if (task && !task.completed && task.reminder) {
+          // For new format notifications, check if the reminder time matches
+          const reminderTimeKey = task.reminder.replace(/[:.]/g, '');
+          if (notification.id.includes(reminderTimeKey)) {
+            return true; // Keep this notification
+          }
+        }
+        
+        // For old format notifications or mismatched reminder times, remove them
+        return false;
+      });
+    });
+  }, [tasks]);
 
   // Request notification permission on mount
   useEffect(() => {
@@ -200,14 +239,8 @@ export function ReminderBell({ tasks }: ReminderBellProps) {
       setShowBadge(false);
     }
     
-    // Remove from reminded tasks so user can get reminded again if needed
-    if (notification) {
-      setRemindedTasks(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(notification.taskId);
-        return newSet;
-      });
-    }
+    // DON'T remove from reminded tasks - clearing notification should not allow re-reminding
+    // The reminder key should stay in remindedTasks to prevent duplicate reminders
   };
 
   // Format time for display
