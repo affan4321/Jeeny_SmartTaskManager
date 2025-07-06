@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { cache } from "react";
 import { ClientTaskTable } from "@/components/client-task-table";
-import { ReminderBell } from "@/components/reminder-bell";
+// import { ReminderBell } from "@/components/reminder-bell";
 import Navbar from "@/components/navbar";
 import { hasEnvVars } from "@/lib/utils";
 import { ErrorBoundary } from "@/components/error-boundary";
