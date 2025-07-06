@@ -43,7 +43,7 @@ export const ClientHome = memo(function ClientHome({ hasEnvVars }: ClientHomePro
             {/* CTA Button */}
             <button
               onClick={handleGetStarted}
-              className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-Jeeny to-pink-600 hover:from-pink-700 hover:to-rose-700 text-white font-semibold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-Jeeny to-pink-600 hover:from-pink-700 hover:to-rose-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
             >
               <span className="text-lg">Get Started</span>
               <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

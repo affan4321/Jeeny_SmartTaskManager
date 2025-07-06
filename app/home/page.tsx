@@ -3,6 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import { cache } from "react";
 import { ClientTaskTable } from "@/components/client-task-table";
 import { ReminderBell } from "@/components/reminder-bell";
+import Navbar from "@/components/navbar";
+import { hasEnvVars } from "@/lib/utils";
 
 // Cache the user data fetching to prevent multiple calls
 const getUser = cache(async () => {
@@ -55,6 +57,8 @@ export default async function HomePage() {
   console.log("Is tasks array:", Array.isArray(tasks));
 
   return (
+    <>
+    <Navbar hasEnvVars={hasEnvVars} />
     <div className="flex flex-col items-center flex-1 p-4 w-full">
       <div className={`flex-1 border-2 border-black dark:border-white rounded-2xl p-5 w-[95%] max-w-[90rem] my-10 backdrop-blur-xl shadow-md dark:shadow-white overflow-hidden flex flex-col`}>
         <div className="flex justify-between items-center mb-4">
@@ -81,5 +85,6 @@ export default async function HomePage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

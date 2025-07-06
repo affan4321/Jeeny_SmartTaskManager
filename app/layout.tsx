@@ -39,7 +39,6 @@ export default function RootLayout({
         >
           <BackgroundCanvas />
           <div className="min-h-screen flex flex-col relative">
-            <Navbar hasEnvVars={hasEnvVars} />
 
             <main className="flex-1 flex flex-col items-center overflow-auto relative z-10">
               {children}

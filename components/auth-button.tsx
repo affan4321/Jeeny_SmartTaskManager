@@ -25,6 +25,7 @@ export async function AuthButton() {
       <Button asChild size="sm" variant={"default"}>
         <Link href="/auth/sign-up">Sign up</Link>
       </Button>
+      <ThemeSwitcher />
     </div>
   );
 }
