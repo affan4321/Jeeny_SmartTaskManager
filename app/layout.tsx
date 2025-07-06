@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Jeeny Smart Task Manager",
   description: "Simple and efficient task management with Next.js and Supabase",
+  icons: {
+    icon: `/favicon.ico?v=${Date.now()}`,
+    shortcut: `/favicon.ico?v=${Date.now()}`,
+    apple: `/favicon.ico?v=${Date.now()}`,
+  },
 };
 
 export const viewport = {
