@@ -5,7 +5,7 @@ import { AuthButton } from "@/components/auth-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
 
 
-export default function Navbar({ hasEnvVars }: { hasEnvVars: string | undefined }) {
+export default function Navbar({ hasEnvVars }: { hasEnvVars: string | undefined | boolean }) {
   return (
     <nav className="w-full flex justify-center border-b border-b-foreground/10 md:h-16 relative z-10">
         <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm gap-2">

@@ -334,3 +334,38 @@
     min-width: 800px;
   }
 }
+
+/* iOS-specific fixes */
+@supports (-webkit-touch-callout: none) {
+  /* Fix for iOS Safari rendering issues */
+  body {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Prevent iOS bounce scroll */
+  html, body {
+    overscroll-behavior: none;
+  }
+  
+  /* Fix for iOS viewport units */
+  .min-h-screen {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+  
+  /* Canvas rendering optimization for iOS */
+  canvas {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+}
+
+/* Additional mobile optimizations */
+@media (max-width: 768px) {
+  /* Improve performance on mobile */
+  * {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+}

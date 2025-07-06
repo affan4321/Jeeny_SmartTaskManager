@@ -5,6 +5,7 @@ import { ClientTaskTable } from "@/components/client-task-table";
 import { ReminderBell } from "@/components/reminder-bell";
 import Navbar from "@/components/navbar";
 import { hasEnvVars } from "@/lib/utils";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 // Cache the user data fetching to prevent multiple calls
 const getUser = cache(async () => {
@@ -75,13 +76,15 @@ export default async function HomePage() {
         </div>
         
         <div className="flex-1 overflow-hidden">
-          {Array.isArray(tasks) ? (
-            <ClientTaskTable initialTasks={tasks} />
-          ) : (
-            <div className="text-center text-red-500 py-8">
-              {tasks.error || "Error loading tasks"}
-            </div>
-          )}
+          <ErrorBoundary>
+            {Array.isArray(tasks) ? (
+              <ClientTaskTable initialTasks={tasks} />
+            ) : (
+              <div className="text-center text-red-500 py-8">
+                {tasks.error || "Error loading tasks"}
+              </div>
+            )}
+          </ErrorBoundary>
         </div>
       </div>
     </div>

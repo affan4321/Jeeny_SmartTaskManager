@@ -1,35 +1,55 @@
 'use client'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 
 export default function BackgroundCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isClient) return
+    
     const canvas = canvasRef.current
     if (!canvas) return
+    
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
     console.log('BackgroundCanvas: Initializing snake-like canvas animation')
 
-    let width = window.innerWidth
-    let height = window.innerHeight
-    canvas.width = width
-    canvas.height = height
+    // Safe window access for iOS
+    let width = typeof window !== 'undefined' ? window.innerWidth : 1920
+    let height = typeof window !== 'undefined' ? window.innerHeight : 1080
+    
+    // iOS Safari can have issues with very large canvas dimensions
+    const maxDimension = 4096
+    width = Math.min(width, maxDimension)
+    height = Math.min(height, maxDimension)
+    
+    try {
+      canvas.width = width
+      canvas.height = height
+    } catch (error) {
+      console.error('BackgroundCanvas: Error setting canvas dimensions:', error)
+      return
+    }
 
     console.log('BackgroundCanvas: Canvas dimensions:', width, 'x', height)
 
     // Create 4 snake-like paths that enter from outside the canvas
-    const snakes = Array.from({ length: 4 }).map((_, snakeIndex) => ({
+    const snakes = Array.from({ length: 4 }).map((_, index) => ({
       points: [] as Array<{x: number, y: number}>,
       speed: 0.8 + Math.random() * 3, // Faster movement for longer paths
       amplitude: 40 + Math.random() * 10, // Larger amplitude for more dramatic curves
       frequency: 0.003 + Math.random() * 0.005, // Slower frequency for smoother curves
-      phase: snakeIndex * Math.PI * 2 / 4,
+      phase: index * Math.PI * 2 / 4,
       // Start from outside the canvas
-      x: snakeIndex % 2 === 0 ? -100 : width + 100, // Left or right side entry
+      x: index % 2 === 0 ? -100 : width + 100, // Left or right side entry
       y: Math.random() * height, // Random vertical position
-      direction: snakeIndex % 2 === 0 ? 0 : Math.PI, // Move right or left initially
+      direction: index % 2 === 0 ? 0 : Math.PI, // Move right or left initially
       maxPoints: 200, // Much longer trails
       lifespan: 0, // Track how long the snake has been alive
       maxLifespan: 1000 + Math.random() * 500, // Live longer for screen-crossing paths
@@ -42,7 +62,7 @@ export default function BackgroundCanvas() {
       ctx.clearRect(0, 0, width, height)
       time += 0.01
 
-      snakes.forEach((snake) => {
+      snakes.forEach((snake, index) => {
         // Increment lifespan
         snake.lifespan++
 
@@ -237,17 +257,39 @@ export default function BackgroundCanvas() {
 
     animate()
 
-    // resize listener
+    // iOS-friendly resize listener with throttling
+    let resizeTimeout: NodeJS.Timeout
     const handleResize = () => {
-      width = window.innerWidth
-      height = window.innerHeight
-      canvas.width = width
-      canvas.height = height
+      clearTimeout(resizeTimeout)
+      resizeTimeout = setTimeout(() => {
+        try {
+          if (typeof window !== 'undefined') {
+            width = Math.min(window.innerWidth, 4096)
+            height = Math.min(window.innerHeight, 4096)
+            canvas.width = width
+            canvas.height = height
+          }
+        } catch (error) {
+          console.error('BackgroundCanvas: Error during resize:', error)
+        }
+      }, 100)
     }
-    window.addEventListener('resize', handleResize)
+    
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize, { passive: true })
+    }
 
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+    return () => {
+      clearTimeout(resizeTimeout)
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize)
+      }
+    }
+  }, [isClient])
+
+  if (!isClient) {
+    return null
+  }
 
   return (
     <canvas
@@ -259,7 +301,10 @@ export default function BackgroundCanvas() {
         top: 0,
         left: 0,
         width: '100vw',
-        height: '100vh'
+        height: '100vh',
+        // iOS-specific optimizations
+        WebkitTransform: 'translate3d(0, 0, 0)',
+        transform: 'translate3d(0, 0, 0)',
       }}
     />
   )
