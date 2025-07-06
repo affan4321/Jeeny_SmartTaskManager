@@ -62,7 +62,7 @@ export default function BackgroundCanvas() {
       ctx.clearRect(0, 0, width, height)
       time += 0.01
 
-      snakes.forEach((snake, index) => {
+      snakes.forEach((snake) => {
         // Increment lifespan
         snake.lifespan++
 

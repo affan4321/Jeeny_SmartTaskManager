@@ -33,7 +33,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
           <div className="text-center">
             <h2 className="text-xl font-bold mb-4">Something went wrong</h2>
             <p className="text-gray-600 mb-4">
-              We're having trouble loading this page. Please try refreshing.
+              We&apos;re having trouble loading this page. Please try refreshing.
             </p>
             <button
               onClick={() => window.location.reload()}
