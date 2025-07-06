@@ -20,6 +20,8 @@
   <a href="#getting-started"><strong>Getting Started</strong></a> ·
   <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
   <a href="#development"><strong>Development</strong></a> ·
+  <a href="#assumptions-made"><strong>Assumptions</strong></a> ·
+  <a href="#future-improvements"><strong>Future Improvements</strong></a> ·
   <a href="#contributing"><strong>Contributing</strong></a>
 </p>
 
@@ -176,6 +178,101 @@ npm run start
 - Make sure your Supabase environment variables are set correctly
 - The app uses React 19 with `@testing-library/react@^16.0.0` for compatibility
 - All tests should pass before deployment
+
+## 🤝 Contributing
+
+## 📋 Assumptions Made
+
+During the development of this task manager application, several key assumptions were made to guide design and implementation decisions:
+
+### **User Behavior Assumptions**
+- **Single User Focus**: Each user manages their own tasks independently - no team collaboration features required
+- **Personal Productivity**: Primary use case is individual task management rather than enterprise project management
+- **Mobile-First Usage**: Users will frequently access the app on mobile devices, requiring responsive design
+- **Real-time Expectations**: Users expect immediate updates when tasks are modified
+
+### **Technical Assumptions**
+- **Modern Browser Support**: Target modern browsers with ES6+ support and WebSocket capabilities
+- **Stable Internet Connection**: Real-time features assume relatively stable internet connectivity
+- **Timezone Handling**: Users primarily work within their local timezone with occasional cross-timezone scheduling
+- **Storage Requirements**: Task data size remains reasonable (no large file attachments initially)
+
+### **Scalability Assumptions**
+- **User Base**: Designed to handle thousands of concurrent users, not millions
+- **Task Volume**: Average user manages 50-200 tasks simultaneously
+- **Geographic Distribution**: Primary user base concentrated in major metropolitan areas
+
+### **Security Assumptions**
+- **User Trust**: Users trust the platform with personal task data
+- **Email Verification**: Valid email addresses for authentication and notifications
+- **Browser Security**: Users maintain updated browsers with standard security practices
+
+---
+
+## 🚀 Future Improvements
+
+Given additional development time, the following enhancements would significantly improve the application:
+
+### **🎯 Core Functionality Enhancements**
+- **Task Prioritization**: High/Medium/Low priority levels with visual indicators and sorting
+- **Subtasks & Dependencies**: Break large tasks into smaller components with prerequisite relationships
+- **Recurring Tasks**: Daily, weekly, monthly task repetition with customizable patterns
+- **Task Templates**: Pre-defined task structures for common workflows
+- **Bulk Operations**: Select and modify multiple tasks simultaneously
+- **Advanced Search**: Filter by date ranges, categories, priority, and complex queries
+- **Task Import/Export**: CSV, JSON, and popular task manager format support
+
+### **👥 Collaboration Features**
+- **Team Workspaces**: Shared task management for teams and projects
+- **Task Assignment**: Delegate tasks to team members with notification systems
+- **Comments & Updates**: Task-specific communication threads
+- **Permission Management**: Role-based access control (Admin, Member, Viewer)
+- **Activity Feeds**: Real-time updates on team task activities
+
+### **📊 Analytics & Insights**
+- **Productivity Dashboard**: Task completion rates, time tracking, and performance metrics
+- **Progress Visualization**: Charts showing completion trends and productivity patterns
+- **Time Tracking**: Built-in timer for task duration measurement
+- **Goal Setting**: Monthly/quarterly objectives with progress tracking
+- **Reports Generation**: Exportable productivity reports for personal or team review
+
+### **🔧 Technical Improvements**
+- **Offline Support**: Progressive Web App with offline task management capabilities
+- **Performance Optimization**: Virtualized lists for large task datasets and lazy loading
+- **Advanced Caching**: Intelligent cache management for improved response times
+- **API Rate Limiting**: Enhanced security with request throttling and abuse prevention
+- **Database Optimization**: Query optimization and indexing for scale
+- **Error Monitoring**: Comprehensive logging and error tracking with Sentry integration
+
+### **🎨 User Experience Enhancements**
+- **Drag & Drop Interface**: Visual task reordering and category management
+- **Keyboard Shortcuts**: Power user keyboard navigation and quick actions
+- **Customizable Themes**: User-defined color schemes and layout preferences
+- **Advanced Notifications**: Desktop, mobile push, email, and SMS reminder options
+- **Accessibility Improvements**: Screen reader support and WCAG 2.1 AA compliance
+- **Onboarding Flow**: Interactive tutorial for new users
+
+### **🔌 Integration Capabilities**
+- **Calendar Sync**: Two-way integration with Google Calendar, Outlook, and Apple Calendar
+- **Third-party Apps**: Slack, Microsoft Teams, Trello, and Asana integrations
+- **Email Integration**: Create tasks from emails and send task summaries
+- **API Development**: Public REST API for third-party integrations
+- **Webhook Support**: Real-time notifications to external systems
+
+### **📱 Platform Expansion**
+- **Native Mobile Apps**: iOS and Android applications with native notifications
+- **Desktop Application**: Electron-based desktop app for Windows, macOS, and Linux
+- **Browser Extensions**: Quick task creation from any webpage
+- **Voice Integration**: Alexa and Google Assistant task management
+
+### **🛡️ Advanced Security**
+- **Two-Factor Authentication**: Enhanced account security with 2FA options
+- **Single Sign-On (SSO)**: Enterprise authentication with SAML and OAuth providers
+- **Data Encryption**: End-to-end encryption for sensitive task information
+- **Audit Logging**: Comprehensive activity logs for security and compliance
+- **GDPR Compliance**: Enhanced privacy controls and data portability features
+
+---
 
 ## 🤝 Contributing
 
