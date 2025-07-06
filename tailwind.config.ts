@@ -11,6 +11,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        Jeeny: "#ef018d",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

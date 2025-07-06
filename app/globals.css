@@ -63,6 +63,274 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+  }
+}
+
+/* Task Table Styles */
+.task-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  /* border: 1px solid #e5e7eb; */
+  /* border-radius: 0.5rem; */
+  overflow: hidden;
+}
+
+.dark .task-table {
+  border-color: transparent;
+}
+
+.task-table th {
+  background-color: transparent;
+  border-bottom: 2px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+  font-weight: 600;
+  text-align: left;
+  position: relative;
+}
+
+.dark .task-table th {
+  background-color: transparent;
+  border-bottom-color: #374151;
+  border-right-color: #374151;
+}
+
+.task-table th:last-child {
+  border-right: none;
+}
+
+.task-table td {
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+  vertical-align: top;
+}
+
+.dark .task-table td {
+  border-bottom-color: #374151;
+  border-right-color: #374151;
+}
+
+.task-table td:last-child {
+  border-right: none;
+}
+
+.task-table tr:last-child td {
+  border-bottom: none;
+}
+
+.task-table tr:hover {
+  background-color: #f3f4f6;
+}
+
+.dark .task-table tr:hover {
+  background-color: #374151;
+}
+
+.task-table tr:nth-child(even) {
+  background-color: transparent;
+}
+
+.dark .task-table tr:nth-child(even) {
+  background-color: transparent;
+}
+
+.task-table tr:nth-child(even):hover {
+  background-color: #f3f4f6;
+}
+
+.dark .task-table tr:nth-child(even):hover {
+  background-color: #374151;
+}
+
+/* Column Resize Handle */
+.column-resize-handle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: col-resize;
+  background-color: transparent;
+  border-right: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.column-resize-handle:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-right-color: #3b82f6;
+}
+
+.dark .column-resize-handle:hover {
+  background-color: rgba(59, 130, 246, 0.2);
+}
+
+/* Task Table Container */
+.task-table-container {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.task-table {
+  position: relative;
+  overflow: visible;
+}
+
+/* Task Table Headers */
+.task-table thead th {
+  position: relative;
+  z-index: 10;
+  overflow: visible;
+}
+
+.task-table thead {
+  position: relative;
+  z-index: 10;
+}
+
+/* Filter Dropdown Positioning */
+.task-table thead th .filter-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 50;
+  margin-top: 2px;
+}
+
+/* Scrollbar Styling */
+.task-table-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.task-table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.dark .task-table-container::-webkit-scrollbar-track {
+  background: #374151;
+}
+
+.task-table-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.dark .task-table-container::-webkit-scrollbar-thumb {
+  background: #6b7280;
+}
+
+.task-table-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.dark .task-table-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Filter Dropdown */
+.filter-dropdown {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background-color: white;
+  z-index: 50;
+}
+
+.dark .filter-dropdown {
+  border-color: #374151;
+  background-color: #1f2937;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.status-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Deadline Status Colors */
+.deadline-overdue {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.dark .deadline-overdue {
+  background-color: #7f1d1d;
+  color: #fca5a5;
+  border-color: #991b1b;
+}
+
+.deadline-today {
+  background-color: #fff7ed;
+  color: #ea580c;
+  border: 1px solid #fed7aa;
+}
+
+.dark .deadline-today {
+  background-color: #7c2d12;
+  color: #fdba74;
+  border-color: #9a3412;
+}
+
+.deadline-soon {
+  background-color: #fefce8;
+  color: #ca8a04;
+  border: 1px solid #fef3c7;
+}
+
+.dark .deadline-soon {
+  background-color: #713f12;
+  color: #fde047;
+  border-color: #92400e;
+}
+
+.deadline-future {
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.dark .deadline-future {
+  background-color: #14532d;
+  color: #86efac;
+  border-color: #166534;
+}
+
+/* Animation for loading states */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.loading {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+  .task-table-container {
+    overflow-x: auto;
+  }
+  
+  .task-table {
+    min-width: 800px;
   }
 }
