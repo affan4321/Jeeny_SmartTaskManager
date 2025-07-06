@@ -45,13 +45,20 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Debug logging for iOS issues
+  console.log('Middleware - Path:', request.nextUrl.pathname);
+  console.log('Middleware - User:', user ? 'authenticated' : 'not authenticated');
+  console.log('Middleware - User Agent:', request.headers.get('user-agent'));
+
   if (
     request.nextUrl.pathname !== "/" &&
     !user &&
     !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
+    !request.nextUrl.pathname.startsWith("/auth") &&
+    !request.nextUrl.pathname.startsWith("/home") // Allow home page access for debugging
   ) {
     // no user, potentially respond by redirecting the user to the login page
+    console.log('Middleware - Redirecting to login');
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);

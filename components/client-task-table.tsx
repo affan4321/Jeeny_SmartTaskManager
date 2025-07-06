@@ -38,17 +38,18 @@ export function ClientTaskTable({ initialTasks, showReminderBell = false }: Clie
 
   // Set up realtime subscription for tasks
   useEffect(() => {
-    const supabase = createClient();
-    
-    const channel = supabase
-      .channel('tasks-realtime')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'tasks'
-        },
+    try {
+      const supabase = createClient();
+      
+      const channel = supabase
+        .channel('tasks-realtime')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'tasks'
+          },
         async (payload) => {
           console.log('Realtime change detected:', payload);
           
@@ -100,6 +101,10 @@ export function ClientTaskTable({ initialTasks, showReminderBell = false }: Clie
     return () => {
       supabase.removeChannel(channel);
     };
+    } catch (error) {
+      console.error('ClientTaskTable: Error setting up realtime subscription:', error);
+      // Continue without realtime if it fails
+    }
   }, []);
 
   const handleTaskUpdate = useCallback(async (taskId: string, updates: Partial<Task>) => {

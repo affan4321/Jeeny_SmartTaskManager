@@ -4,40 +4,51 @@ import { useRef, useEffect, useState } from 'react'
 export default function BackgroundCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [isClient, setIsClient] = useState(false)
+  const [isIOS, setIsIOS] = useState(false)
 
   useEffect(() => {
     setIsClient(true)
+    // Detect iOS
+    const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+    setIsIOS(iOS)
   }, [])
+
+  // Temporarily disable canvas on iOS to prevent crashes
+  if (isIOS) {
+    return null
+  }
 
   useEffect(() => {
     if (!isClient) return
     
-    const canvas = canvasRef.current
-    if (!canvas) return
-    
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    console.log('BackgroundCanvas: Initializing snake-like canvas animation')
-
-    // Safe window access for iOS
-    let width = typeof window !== 'undefined' ? window.innerWidth : 1920
-    let height = typeof window !== 'undefined' ? window.innerHeight : 1080
-    
-    // iOS Safari can have issues with very large canvas dimensions
-    const maxDimension = 4096
-    width = Math.min(width, maxDimension)
-    height = Math.min(height, maxDimension)
-    
     try {
-      canvas.width = width
-      canvas.height = height
-    } catch (error) {
-      console.error('BackgroundCanvas: Error setting canvas dimensions:', error)
-      return
-    }
+      const canvas = canvasRef.current
+      if (!canvas) return
+      
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return
 
-    console.log('BackgroundCanvas: Canvas dimensions:', width, 'x', height)
+      console.log('BackgroundCanvas: Initializing snake-like canvas animation')
+
+      // Safe window access for iOS
+      let width = typeof window !== 'undefined' ? window.innerWidth : 1920
+      let height = typeof window !== 'undefined' ? window.innerHeight : 1080
+      
+      // iOS Safari can have issues with very large canvas dimensions
+      const maxDimension = 2048 // Reduced from 4096 for better iOS compatibility
+      width = Math.min(width, maxDimension)
+      height = Math.min(height, maxDimension)
+      
+      try {
+        canvas.width = width
+        canvas.height = height
+      } catch (error) {
+        console.error('BackgroundCanvas: Error setting canvas dimensions:', error)
+        return
+      }
+
+      console.log('BackgroundCanvas: Canvas dimensions:', width, 'x', height)
 
     // Create 4 snake-like paths that enter from outside the canvas
     const snakes = Array.from({ length: 4 }).map((_, index) => ({
@@ -284,6 +295,10 @@ export default function BackgroundCanvas() {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
       }
+    }
+    } catch (error) {
+      console.error('BackgroundCanvas: Failed to initialize canvas:', error)
+      // Fail silently to prevent app crash
     }
   }, [isClient])
 
