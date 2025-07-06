@@ -114,8 +114,8 @@ export async function POST(request: NextRequest) {
       title: title.trim(),
       description: description?.trim() || "",
       category_id: category_id,
-      deadline: deadline ? new Date(deadline).toISOString() : null,
-      reminder: reminder ? new Date(reminder).toISOString() : null,
+      deadline: deadline || null, // Already in ISO format from client
+      reminder: reminder || null, // Already in ISO format from client
       completed: false,
       user_id: user.id
     };

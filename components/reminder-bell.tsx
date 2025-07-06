@@ -244,7 +244,7 @@ export function ReminderBell({ tasks }: ReminderBellProps) {
   });
 
   return (
-    <div className="relative">
+    <div className="relative z-10">
       <button
         onClick={handleOpen}
         className="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -272,7 +272,7 @@ export function ReminderBell({ tasks }: ReminderBellProps) {
         
         {/* Notification Badge */}
         {(showBadge || unreadCount > 0) && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center z-30 font-medium shadow-md">
             {unreadCount > 0 ? unreadCount : '!'}
           </span>
         )}
@@ -282,10 +282,10 @@ export function ReminderBell({ tasks }: ReminderBellProps) {
       {isOpen && (
         <>
           <div 
-            className="fixed inset-0 z-10" 
+            className="fixed inset-0 z-[90]" 
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 mt-2 w-60 sm:w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-20 max-h-[80vh] sm:max-h-96 overflow-hidden">
+          <div className="absolute right-0 mt-2 w-60 sm:w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-[80vh] sm:max-h-96 overflow-hidden z-[100]">
             <div className="p-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between">
                 <div>

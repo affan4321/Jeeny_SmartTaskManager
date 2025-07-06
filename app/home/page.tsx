@@ -61,10 +61,9 @@ export default async function HomePage() {
     <>
     <Navbar hasEnvVars={hasEnvVars} />
     <div className="flex flex-col items-center flex-1 p-4 w-full">
-      <div className={`flex-1 border-2 border-black dark:border-white rounded-2xl p-5 w-[95%] max-w-[90rem] my-10 backdrop-blur-xl shadow-md dark:shadow-white overflow-hidden flex flex-col`}>
+      <div className={`flex-1 border-2 border-black dark:border-white rounded-2xl p-5 w-[95%] max-w-[90rem] my-10 backdrop-blur-xl shadow-md dark:shadow-white overflow-visible flex flex-col`}>
         <div className="flex justify-between items-center mb-4">
           <h1 className="font-bold text-xl">Task Manager</h1>
-          {Array.isArray(tasks) && <ReminderBell tasks={tasks} />}
         </div>
         
         <div className="mb-4 flex-shrink-0">
@@ -75,10 +74,10 @@ export default async function HomePage() {
           )}
         </div>
         
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 overflow-auto">
           <ErrorBoundary>
             {Array.isArray(tasks) ? (
-              <ClientTaskTable initialTasks={tasks} />
+              <ClientTaskTable initialTasks={tasks} showReminderBell={true} />
             ) : (
               <div className="text-center text-red-500 py-8">
                 {tasks.error || "Error loading tasks"}

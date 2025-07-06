@@ -38,26 +38,19 @@ export function EditTaskForm({ task, onClose }: EditTaskFormProps) {
   const [deadline, setDeadline] = useState(() => {
     if (task.deadline) {
       const date = new Date(task.deadline);
-      // Convert to local time for datetime-local input
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      return `${year}-${month}-${day}T${hours}:${minutes}`;
+      // Convert UTC time to local time for datetime-local input
+      const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+      return localDate.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:MM
     }
     return "";
   });
   const [reminderTime, setReminderTime] = useState(() => {
     if (task.reminder) {
       const date = new Date(task.reminder);
-      // Convert to local time for datetime-local input
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      return `${year}-${month}-${day}T${hours}:${minutes}`;
+      // Convert UTC time to local time for datetime-local input
+      // We need to offset by timezone to show the correct local time
+      const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+      return localDate.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:MM
     }
     return "";
   });
@@ -115,8 +108,8 @@ export function EditTaskForm({ task, onClose }: EditTaskFormProps) {
           description: description.trim(),
           category: category.trim() || null,
           completed: completed,
-          deadline: deadline || null,
-          reminder: reminderTime || null,
+          deadline: deadline ? new Date(deadline).toISOString() : null,
+          reminder: reminderTime ? new Date(reminderTime).toISOString() : null,
         }),
       });
 

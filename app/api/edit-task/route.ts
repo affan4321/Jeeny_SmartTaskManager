@@ -78,8 +78,8 @@ export async function PUT(request: NextRequest) {
         description: description?.trim() || "",
         category_id: category_id,
         completed: completed || false,
-        deadline: deadline ? new Date(deadline).toISOString() : null,
-        reminder: reminder ? new Date(reminder).toISOString() : null,
+        deadline: deadline || null, // Already in ISO format from client
+        reminder: reminder || null, // Already in ISO format from client
         updated_at: new Date().toISOString()
       })
       .eq("id", taskId)

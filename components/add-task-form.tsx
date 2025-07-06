@@ -62,8 +62,8 @@ export function AddTaskForm({ onClose }: { onClose?: () => void }) {
         title: title.trim(),
         description: description.trim(),
         category: category.trim() || null,
-        deadline: deadline || null,
-        reminder: reminderTime || null,
+        deadline: deadline ? new Date(deadline).toISOString() : null,
+        reminder: reminderTime ? new Date(reminderTime).toISOString() : null,
       };
       
       console.log("Sending request data:", requestData);

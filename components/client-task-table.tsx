@@ -29,7 +29,7 @@ interface ClientTaskTableProps {
   showReminderBell?: boolean;
 }
 
-export function ClientTaskTable({ initialTasks, showReminderBell = false }: ClientTaskTableProps) {
+export function ClientTaskTable({ initialTasks, showReminderBell = true }: ClientTaskTableProps) {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [isUpdating, setIsUpdating] = useState<string | null>(null);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
@@ -192,10 +192,10 @@ export function ClientTaskTable({ initialTasks, showReminderBell = false }: Clie
   }, []);
 
   return (
-    <div>
+    <div className="relative">
       {/* Reminder Bell - only show if requested */}
       {showReminderBell && (
-        <div className="mb-4 flex justify-end">
+        <div className="mb-4 flex justify-end pr-2 pt-2 relative z-[80]">
           <ReminderBell tasks={tasks} />
         </div>
       )}
@@ -217,14 +217,16 @@ export function ClientTaskTable({ initialTasks, showReminderBell = false }: Clie
         </div>
       )}
       
-      <TaskTable 
-        tasks={tasks} 
-        onTaskUpdate={handleTaskUpdate}
-        onTaskEdit={handleTaskEdit}
-        onTaskDelete={handleTaskDelete}
-        onAddTask={handleAddTask}
-        isUpdating={isUpdating}
-      />
+      <div className="relative z-[10]">
+        <TaskTable 
+          tasks={tasks} 
+          onTaskUpdate={handleTaskUpdate}
+          onTaskEdit={handleTaskEdit}
+          onTaskDelete={handleTaskDelete}
+          onAddTask={handleAddTask}
+          isUpdating={isUpdating}
+        />
+      </div>
     </div>
   );
 }
